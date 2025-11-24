@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cipher Rune Alphabet</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .download-all-btn {
+      font-size: 12px;
+      padding: 6px 12px;
+      background: #222;
+      color: #eee;
+      border: 1px solid #444;
+      cursor: pointer;
+    }
+
+    .alphabet {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .glyph {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .glyph-label {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    svg.symbol {
+      width: 70px;
+      height: 70px;
+    }
+
+    .download-btn {
+      margin-top: 4px;
+      font-size: 10px;
+      padding: 2px 6px;
+      background: #222;
+      color: #eee;
+      border: 1px solid #444;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cipher Rune Alphabet</h1>
+  <div class="controls">
+    <button id="downloadAll" class="download-all-btn">Download All SVGs (ZIP)</button>
+  </div>
+  <div id="alphabet" class="alphabet"></div>
+
+  <!-- JSZip for creating a ZIP in the browser -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <script>
+    const SVG_NS = "http://www.w3.org/2000/svg";
+
+    const symbolDefs = {
+      A: [
+        { t: "circle", cx: 50, cy: 50, r: 26 },
+        { t: "polyline", points: "50,26 30,70 70,70 50,26" }
+      ],
+      B: [
+        { t: "polyline", points: "35,20 20,40 30,60 50,65 65,45 55,25 35,20" },
+        { t: "polyline", points: "45,30 32,46 40,58 52,60 60,47 53,33 45,30" }
+      ],
+      C: [
+        { t: "path", d: "M70 25 Q40 15 25 35 Q15 50 25 65 Q40 85 65 75 Q50 70 48 60" },
+        { t: "circle", cx: 55, cy: 55, r: 4 }
+      ],
+      D: [
+        { t: "rect", x: 25, y: 25, width: 50, height: 50, rx: 8, ry: 8 },
+        { t: "path", d: "M25 25 L75 75" },
+        { t: "path", d: "M35 35 L65 65" }
+      ],
+      E: [
+        { t: "path", d: "M25 70 Q50 40 75 70" },
+        { t: "path", d: "M30 60 Q50 35 70 60" },
+        { t: "path", d: "M35 52 Q50 32 65 52" }
+      ],
+      F: [
+        { t: "polyline", points: "40,20 55,30 40,40 55,50 40,60 55,70 40,80" },
+        { t: "line", x1: 60, y1: 25, x2: 75, y2: 35 }
+      ],
+      G: [
+        { t: "path", d: "M35 25 Q20 40 22 55 Q24 75 42 85 Q60 90 75 72 Q85 60 80 42 Q75 25 55 20 Q45 18 35 25 Z" },
+        { t: "line", x1: 55, y1: 20, x2: 60, y2: 10 },
+        { t: "line", x1: 60, y1: 10, x2: 70, y2: 8 }
+      ],
+      H: [
+        { t: "path", d: "M45 20 Q40 40 45 60 Q50 80 45 90" },
+        { t: "circle", cx: 62, cy: 50, r: 14 },
+        { t: "line", x1: 62, y1: 36, x2: 62, y2: 64 }
+      ],
+      I: [
+        { t: "polyline", points: "50,20 30,40 50,60 70,40 50,20" },
+        { t: "path", d: "M50 60 Q48 72 40 80 Q35 85 33 90" }
+      ],
+      J: [
+        { t: "polyline", points: "35,25 50,40 65,25" },
+        { t: "polyline", points: "50,40 50,60 40,75" },
+        { t: "polyline", points: "50,60 60,75" }
+      ],
+      K: [
+        { t: "path", d: "M30 25 Q20 50 30 75 Q40 90 55 85 Q70 80 78 60 Q83 45 78 30 Q72 15 55 15 Q40 15 30 25" },
+        { t: "line", x1: 50, y1: 25, x2: 50, y2: 75 }
+      ],
+      L: [
+        { t: "circle", cx: 42, cy: 45, r: 18 },
+        { t: "circle", cx: 58, cy: 55, r: 18 },
+        { t: "line", x1: 30, y1: 70, x2: 70, y2: 30 }
+      ],
+      M: [
+        { t: "polyline", points: "30,80 40,35 50,50 60,35 70,80" },
+        { t: "polyline", points: "40,35 50,25 60,35" }
+      ],
+      N: [
+        { t: "rect", x: 25, y: 25, width: 50, height: 40, rx: 6, ry: 6 },
+        { t: "rect", x: 32, y: 32, width: 36, height: 26, rx: 4, ry: 4 },
+        { t: "path", d: "M61 32 L68 18" }
+      ],
+      O: [
+        { t: "path", d: "M20 50 Q35 25 50 25 Q65 25 80 50 Q65 75 50 75 Q35 75 20 50 Z" },
+        { t: "circle", cx: 50, cy: 50, r: 10 },
+        { t: "circle", cx: 50, cy: 50, r: 4 }
+      ],
+      P: [
+        { t: "rect", x: 28, y: 25, width: 44, height: 40, rx: 4, ry: 4 },
+        { t: "line", x1: 50, y1: 25, x2: 50, y2: 65 },
+        { t: "path", d: "M28 65 L40 80 60 80 72 65" }
+      ],
+      Q: [
+        { t: "circle", cx: 50, cy: 45, r: 22 },
+        { t: "path", d: "M60 60 Q70 75 75 85" }
+      ],
+      R: [
+        { t: "polyline", points: "50,20 35,40 50,60 65,40 50,20" },
+        { t: "polyline", points: "35,40 32,65 50,80 68,65 65,40" }
+      ],
+      S: [
+        { t: "path", d: "M70 22 Q48 18 40 30 Q32 40 40 48 Q50 58 42 68 Q34 78 25 78" },
+        { t: "circle", cx: 72, cy: 30, r: 4 }
+      ],
+      T: [
+        { t: "circle", cx: 50, cy: 50, r: 23 },
+        { t: "line", x1: 32, y1: 39, x2: 68, y2: 61 },
+        { t: "line", x1: 35, y1: 68, x2: 65, y2: 68 }
+      ],
+      U: [
+        { t: "path", d: "M28 70 Q30 30 50 25 Q70 30 72 70" },
+        { t: "path", d: "M38 62 Q50 50 62 62" }
+      ],
+      V: [
+        { t: "line", x1: 50, y1: 22, x2: 50, y2: 78 },
+        { t: "line", x1: 25, y1: 50, x2: 75, y2: 50 },
+        { t: "line", x1: 32, y1: 32, x2: 68, y2: 68 },
+        { t: "line", x1: 68, y1: 32, x2: 32, y2: 68 }
+      ],
+      W: [
+        { t: "path", d: "M25 55 Q25 35 40 35 Q55 35 55 55 Q55 75 40 75 Q25 75 25 55 Z" },
+        { t: "path", d: "M75 55 Q75 35 60 35 Q45 35 45 55 Q45 75 60 75 Q75 75 75 55 Z" }
+      ],
+      X: [
+        { t: "path", d: "M30 30 Q50 20 55 25 Q60 30 55 40 Q50 50 35 60 Q25 68 22 78" },
+        { t: "path", d: "M70 30 Q50 20 45 25 Q40 30 45 40 Q50 50 65 60 Q75 68 78 78" }
+      ],
+      Y: [
+        { t: "circle", cx: 50, cy: 50, r: 20 },
+        { t: "line", x1: 50, y1: 30, x2: 50, y2: 15 },
+        { t: "line", x1: 35, y1: 60, x2: 25, y2: 75 },
+        { t: "line", x1: 65, y1: 60, x2: 75, y2: 75 }
+      ],
+      Z: [
+        { t: "rect", x: 28, y: 28, width: 44, height: 44, rx: 4, ry: 4 },
+        { t: "path", d: "M28 72 L72 28" },
+        { t: "circle", cx: 50, cy: 50, r: 4 }
+      ]
+    };
+
+    function createShape(shape) {
+      const el = document.createElementNS(SVG_NS, shape.t);
+      for (const [k, v] of Object.entries(shape)) {
+        if (k === "t") continue;
+        el.setAttribute(k, v);
+      }
+      // Inline style so exported SVGs look correct everywhere
+      el.setAttribute("fill", "none");
+      el.setAttribute("stroke", "#000000");
+      el.setAttribute("stroke-width", "4.5");
+      el.setAttribute("stroke-linecap", "round");
+      el.setAttribute("stroke-linejoin", "round");
+      return el;
+    }
+
+    function buildSvgForLetter(letter, rotate) {
+      const svg = document.createElementNS(SVG_NS, "svg");
+      svg.classList.add("symbol");
+      svg.setAttribute("viewBox", "0 0 100 100");
+
+      const def = symbolDefs[letter];
+      if (!def) return svg;
+
+      def.forEach(shape => {
+        const el = createShape(shape);
+        svg.appendChild(el);
+      });
+
+      if (rotate) {
+        const angle = (Math.random() - 0.5) * 4; // -2° to +2°
+        svg.style.transform = `rotate(${angle}deg)`;
+      }
+
+      return svg;
+    }
+
+    function buildAlphabet() {
+      const container = document.getElementById("alphabet");
+
+      for (let i = 0; i < 26; i++) {
+        const letter = String.fromCharCode(65 + i);
+        const wrap = document.createElement("div");
+        wrap.className = "glyph";
+
+        const svg = buildSvgForLetter(letter, true);
+        const label = document.createElement("span");
+        label.className = "glyph-label";
+        label.textContent = letter;
+
+        const downloadBtn = document.createElement("button");
+        downloadBtn.className = "download-btn";
+        downloadBtn.textContent = "Download SVG";
+
+        downloadBtn.addEventListener("click", () => {
+          const clone = buildSvgForLetter(letter, false); // no rotation in saved file
+          const serializer = new XMLSerializer();
+          const svgText = serializer.serializeToString(clone);
+
+          const blob = new Blob([svgText], { type: "image/svg+xml" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `${letter}.svg`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        });
+
+        wrap.appendChild(svg);
+        wrap.appendChild(label);
+        wrap.appendChild(downloadBtn);
+        container.appendChild(wrap);
+      }
+    }
+
+    async function downloadAllAsZip() {
+      const zip = new JSZip();
+      const folder = zip.folder("runes") || zip;
+
+      for (let i = 0; i < 26; i++) {
+        const letter = String.fromCharCode(65 + i);
+        const svg = buildSvgForLetter(letter, false); // no rotation for font
+        const serializer = new XMLSerializer();
+        const svgText = serializer.serializeToString(svg);
+        folder.file(`${letter}.svg`, svgText);
+      }
+
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "runes-svg.zip";  // this is your "folder"
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("downloadAll").addEventListener("click", downloadAllAsZip);
+
+    buildAlphabet();
+  </script>
+</body>
+</html>
