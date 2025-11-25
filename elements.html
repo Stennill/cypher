@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cypher UI Elements</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <style>
+    /* ========= THEME ========= */
+    :root {
+      --bg-deep: #02080a;
+      --bg-mid:  #04161a;
+      --teal-core: #41f6ff;
+      --teal-soft: #27c3d0;
+      --accent-warn: #f6d988;
+      --text-main: rgba(226, 255, 255, 0.95);
+      --text-soft: rgba(200, 230, 230, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at top, rgba(65, 246, 255, 0.06), transparent 55%),
+        radial-gradient(circle at bottom, rgba(0, 0, 0, 0.96), var(--bg-deep));
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      overflow-x: hidden;
+    }
+
+    body {
+      padding: 1.5rem 1.25rem 4rem;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding-inline: 3rem;
+      }
+    }
+
+    h1 {
+      font-family: "Orbitron", system-ui, sans-serif;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      color: var(--teal-soft);
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .elements-grid {
+      display: grid;
+      gap: 1.5rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 900px) {
+      .elements-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .element-card {
+      position: relative;
+      padding: 1.1rem 1.1rem 1.2rem;
+      border-radius: 18px;
+      border: 1px solid rgba(120, 255, 255, 0.14);
+      background:
+        radial-gradient(circle at top, rgba(5, 28, 32, 0.9), rgba(0, 0, 0, 0.98));
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(14px);
+    }
+
+    .element-label {
+      font-family: "Orbitron", system-ui, sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      color: rgba(188, 244, 255, 0.9);
+      margin-bottom: 0.3rem;
+    }
+
+    .element-caption {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-bottom: 0.8rem;
+    }
+
+    .element-body {
+      position: relative;
+      padding-top: 0.2rem;
+    }
+
+    /* ========= SIGIL COMPONENT ========= */
+
+    .sigil-demo-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.2rem 0.8rem;
+    }
+
+    .sigil {
+      position: relative;
+      width: min(52vw, 260px);
+      aspect-ratio: 1 / 1;
+    }
+
+    .sigil-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform-origin: 50% 50%;
+      pointer-events: none;
+    }
+
+    @keyframes spin-cw {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-ccw {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    @keyframes smoke-spin {
+      from { transform: scale(0.9) rotate(0deg); }
+      to   { transform: scale(0.9) rotate(360deg); }
+    }
+
+    @keyframes spin-cw-inner {
+      from { transform: scale(0.86) rotate(0deg); }
+      to   { transform: scale(0.86) rotate(360deg); }
+    }
+
+    @keyframes spin-ccw-inner {
+      from { transform: scale(0.86) rotate(0deg); }
+      to   { transform: scale(0.86) rotate(-360deg); }
+    }
+
+    .sigil .smoke {
+      z-index: 1;
+      opacity: 0.3;
+      animation: smoke-spin 30s linear infinite;
+    }
+
+    .sigil .inner-ring-a,
+    .sigil .inner-ring-b {
+      z-index: 2;
+      opacity: 0.85;
+      animation-duration: 40s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+    .sigil .inner-ring-a { animation-name: spin-cw-inner; }
+    .sigil .inner-ring-b { animation-name: spin-ccw-inner; }
+
+    .sigil .outer-ring-a,
+    .sigil .outer-ring-b {
+      z-index: 1;
+      opacity: 0.7;
+      animation-duration: 55s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+    .sigil .outer-ring-a { animation-name: spin-cw; }
+    .sigil .outer-ring-b { animation-name: spin-ccw; }
+
+    .sigil .core {
+      z-index: 3;
+      transform: scale(0.7);
+      filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.9));
+    }
+
+    /* ========= HUD BAR ========= */
+
+    .hud-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(100, 240, 255, 0.25);
+      background: radial-gradient(circle at top, rgba(10, 45, 52, 0.92), rgba(0, 0, 0, 0.97));
+      box-shadow: 0 12px 28px rgba(0,0,0,0.9);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(210, 244, 255, 0.9);
+    }
+
+    .hud-left,
+    .hud-right {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+    }
+
+    .hud-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--teal-core);
+      box-shadow: 0 0 10px rgba(65, 246, 255, 0.9);
+      animation: hud-pulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes hud-pulse {
+      0%, 100% { transform: scale(1);   opacity: 0.8; }
+      50%      { transform: scale(1.4); opacity: 1;   }
+    }
+
+    /* ========= BUTTONS ========= */
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(65, 246, 255, 0.6);
+      background: radial-gradient(circle at top, rgba(65, 246, 255, 0.16), rgba(0, 0, 0, 0.96));
+      color: #e6ffff;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.73rem;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 200, 230, 0.5);
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        filter 0.12s ease,
+        background 0.12s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.9);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 0 8px rgba(0, 200, 230, 0.5);
+    }
+
+    .btn--ghost {
+      border-color: rgba(120, 255, 255, 0.35);
+      background: radial-gradient(circle at top, rgba(10, 45, 52, 0.4), rgba(0, 0, 0, 0.98));
+      box-shadow: 0 0 6px rgba(0, 160, 190, 0.4);
+      color: rgba(212, 240, 244, 0.95);
+    }
+
+    .btn--warn {
+      border-color: rgba(246, 217, 136, 0.8);
+      background: radial-gradient(circle at top, rgba(246,217,136,0.22), rgba(0,0,0,0.96));
+      box-shadow: 0 0 16px rgba(246, 217, 136, 0.55);
+      color: rgba(255, 247, 226, 0.98);
+    }
+
+    /* ========= PANELS / LOGS ========= */
+
+    .panel {
+      background: radial-gradient(circle at top, rgba(5, 30, 35, 0.94), rgba(0, 0, 0, 0.99));
+      border-radius: 18px;
+      border: 1px solid rgba(120, 255, 255, 0.16);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
+      padding: 0.85rem 0.9rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      line-height: 1.45;
+    }
+
+    .panel-title {
+      font-family: "Orbitron", system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      color: rgba(176, 238, 255, 0.95);
+      margin-bottom: 0.4rem;
+    }
+
+    .panel-meta {
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .panel-separator {
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(120, 255, 255, 0.55),
+        transparent
+      );
+      margin: 0.35rem 0 0.55rem;
+      opacity: 0.75;
+    }
+
+    /* ========= INPUT / CODE FIELD ========= */
+
+    .code-input {
+      width: 100%;
+      padding: 0.55rem 0.6rem;
+      border-radius: 12px;
+      border: 1px solid rgba(95, 235, 255, 0.5);
+      background: rgba(0, 0, 0, 0.9);
+      color: var(--teal-core);
+      font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      outline: none;
+      box-shadow: 0 0 12px rgba(0, 200, 230, 0.25);
+      caret-color: var(--teal-core);
+    }
+
+    .code-input::placeholder {
+      color: rgba(140, 200, 210, 0.55);
+    }
+
+    .code-input:focus {
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.8);
+      border-color: rgba(120, 255, 255, 0.9);
+    }
+
+    /* ========= CONTROL STRIP ========= */
+
+    .control-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(80, 210, 230, 0.5);
+      background: radial-gradient(circle at top, rgba(8, 30, 35, 0.96), rgba(0, 0, 0, 1));
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9);
+      font-size: 0.7rem;
+    }
+
+    .control-strip-left,
+    .control-strip-right {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .control-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(196, 236, 244, 0.9);
+    }
+
+    .control-strip .btn {
+      padding-inline: 1.2rem;
+      font-size: 0.7rem;
+    }
+
+    /* ========= UTIL ========= */
+
+    .mt-sm { margin-top: 0.6rem; }
+    .mt-md { margin-top: 0.9rem; }
+    .mt-lg { margin-top: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>CY-03 INTERFACE ELEMENTS</h1>
+  <div class="subtitle">Reference sheet for screens &amp; UI built around the rune device</div>
+
+  <main class="elements-grid">
+
+    <!-- SIGIL -->
+    <section class="element-card">
+      <div class="element-label">Rune Device · Hero Sigil</div>
+      <div class="element-caption">
+        Core animated orb used on splash, major puzzles, and as a focus element
+        in story moments.
+      </div>
+      <div class="element-body sigil-demo-wrapper">
+        <div class="sigil">
+          <img src="assets/smoke-center.png"  class="sigil-layer smoke"        alt="">
+          <img src="assets/inner-ring-a.png"  class="sigil-layer inner-ring-a" alt="">
+          <img src="assets/inner-ring-b.png"  class="sigil-layer inner-ring-b" alt="">
+          <img src="assets/outer-ring-a.png"  class="sigil-layer outer-ring-a" alt="">
+          <img src="assets/outer-ring-b.png"  class="sigil-layer outer-ring-b" alt="">
+          <img src="assets/rune-core.png"     class="sigil-layer core"         alt="">
+        </div>
+      </div>
+    </section>
+
+    <!-- HUD BAR -->
+    <section class="element-card">
+      <div class="element-label">HUD Bar · Channel Header</div>
+      <div class="element-caption">
+        Thin status bar used at the top of in-game screens: chapter name,
+        channel id, timestamps, or signal status.
+      </div>
+      <div class="element-body">
+        <div class="hud-bar">
+          <div class="hud-left">
+            <div class="hud-dot"></div>
+            <span>CHANNEL 03 · ACCESS // LIMITED</span>
+          </div>
+          <div class="hud-right">
+            <span>UTC-LOCK</span>
+            <span>02:17:44</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUTTONS -->
+    <section class="element-card">
+      <div class="element-label">Buttons · Actions</div>
+      <div class="element-caption">
+        Primary and secondary actions used across menus, puzzles, and dialogs.
+      </div>
+      <div class="element-body">
+        <div class="btn-row">
+          <button class="btn">Begin Session</button>
+          <button class="btn btn--ghost">Scan For Signal</button>
+          <button class="btn btn--warn">Override Lock</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL / LOG -->
+    <section class="element-card">
+      <div class="element-label">Panel · Case Log / Clue</div>
+      <div class="element-caption">
+        Glassy card for story fragments, decrypted logs, evidence summaries, or instructions.
+      </div>
+      <div class="element-body">
+        <div class="panel">
+          <div class="panel-title">FRAGMENT LOG // 01.03</div>
+          <div class="panel-meta">Recovered 03:19:22 · Integrity: 87%</div>
+          <div class="panel-separator"></div>
+          <p>
+            &ldquo;The device wasn't built to <em>find</em> them. It was built to
+            keep them from leaving. Every time the outer ring syncs with the inner,
+            something else wakes up on the other side.&rdquo;
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CODE INPUT -->
+    <section class="element-card">
+      <div class="element-label">Input · Access Code / Cipher</div>
+      <div class="element-caption">
+        Monospaced field for entering unlock codes, cipher solutions, or rune translations.
+      </div>
+      <div class="element-body">
+        <input class="code-input" type="text" placeholder="ENTER GLYPH CODE" />
+        <div class="mt-sm btn-row">
+          <button class="btn">Validate</button>
+          <button class="btn btn--ghost">Hint</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTROL STRIP -->
+    <section class="element-card">
+      <div class="element-label">Control Strip · In-Game Footer</div>
+      <div class="element-caption">
+        Bottom bar for navigation and key actions while focused on a puzzle or
+        evidence view.
+      </div>
+      <div class="element-body">
+        <div class="control-strip">
+          <div class="control-strip-left">
+            <span class="control-label">Case 03 · Node B</span>
+          </div>
+          <div class="control-strip-right">
+            <button class="btn btn--ghost">Back</button>
+            <button class="btn">Decrypt</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

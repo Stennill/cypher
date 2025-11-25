@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cypher Splash</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <style>
+    /* ========= GLOBAL BASE ========= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* ========= LAYOUT ========= */
+
+    .splash {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .sigil {
+      position: absolute;
+      left: 50%;
+      top: 10vh;                 /* move rune up/down */
+      transform: translateX(-50%);
+      width: min(62vw, 300px);   /* overall sigil size */
+      aspect-ratio: 1 / 1;
+    }
+
+    .sigil-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      transform-origin: 50% 50%;
+    }
+
+    /* ========= ANIMATIONS ========= */
+
+    /* outer ring rotation */
+    @keyframes spin-cw {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-ccw {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+
+    /* inner ring: scaled slightly smaller + rotation */
+    @keyframes spin-cw-inner {
+      from { transform: scale(0.86) rotate(0deg); }
+      to   { transform: scale(0.86) rotate(360deg); }
+    }
+
+    @keyframes spin-ccw-inner {
+      from { transform: scale(0.86) rotate(0deg); }
+      to   { transform: scale(0.86) rotate(-360deg); }
+    }
+
+    /* smoke: also scaled down a bit + rotation */
+    @keyframes smoke-spin {
+      from { transform: scale(0.9) rotate(0deg); }
+      to   { transform: scale(0.9) rotate(360deg); }
+    }
+     /* glow pulses (brightness / opacity) */
+    @keyframes pulse-inner {
+      0%, 100% {
+        opacity: 0.55;
+        filter: drop-shadow(0 0 4px rgba(0, 255, 255, 0.5));
+      }
+      50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 12px rgba(0, 255, 255, .6));
+      }
+    }
+
+    @keyframes pulse-outer {
+      0%, 100% {
+        opacity: 0.4;
+        filter: drop-shadow(0 0 3px rgba(0, 255, 255, 0.4));
+      }
+      50% {
+        opacity: 0.65;
+        filter: drop-shadow(0 0 9px rgba(0, 255, 255, 0.7));
+      }
+    }
+
+    /* ========= Z-INDEX + PER-LAYER SETTINGS ========= */
+
+    /* smoke behind everything, quite faint so it doesn’t wash out rings */
+    .smoke {
+      z-index: 3;                        /* lighter so the gap shows */
+      animation: smoke-spin 15s linear infinite;
+      transform: scale(0.25);  
+    }
+
+    /* INNER RING — slightly smaller, bright, above smoke */
+    .inner-ring-a,
+    .inner-ring-b {
+      z-index: 3;
+      opacity: 1;
+      animation-duration: 40s;
+      opacity: .5;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.9));
+
+    }
+
+    .inner-ring-a {
+      animation-name: spin-ccw-inner;
+      
+    }
+
+    .inner-ring-b {
+      animation-name: spin-cw-inner;
+      
+    }
+
+    /* OUTER RING — full size, a bit softer, above inner ring */
+    .outer-ring-a,
+    .outer-ring-b {
+      z-index: 4;
+      opacity: .8;
+      animation-duration: 20s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-name: spin-cw;   /* default; override below */
+    }
+
+    .outer-ring-a {
+      animation:
+        spin-ccw 20s linear infinite,
+        pulse-outer 4.2s ease-in-out infinite;
+    }
+
+    .outer-ring-b {
+      animation:
+        spin-cw-inner 40s linear infinite,
+        pulse-inner 3.6s ease-in-out infinite;
+    }
+
+
+    /* RUNE CORE — top, solid, slightly smaller */
+    .core {
+      z-index: 4;
+      opacity: 1;
+      left:-5px;
+      transform: scale(0.45);               /* tweak 0.65–0.8 as needed */
+      filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.9));
+    }
+  </style>
+</head>
+<body>
+  <div class="splash">
+    <img src="assets/bg.png" class="bg" alt="Background" />
+
+    <div class="sigil">
+      <!-- back to front -->
+      <img src="assets/smoke-center.png"  class="sigil-layer smoke"        alt="">
+      <img src="assets/inner-ring-a.png"  class="sigil-layer inner-ring-a" alt="">
+      <img src="assets/inner-ring-b.png"  class="sigil-layer inner-ring-b" alt="">
+      <img src="assets/outer-ring-a.png"  class="sigil-layer outer-ring-a" alt="">
+      <img src="assets/outer-ring-b.png"  class="sigil-layer outer-ring-b" alt="">
+      <img src="assets/rune-core.png"     class="sigil-layer core"         alt="">
+    </div>
+  </div>
+</body>
+</html>
