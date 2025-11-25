@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffb347" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="VEILCODE" />
+  <title>VEILCODE</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+  <!-- SPLASH SCREEN -->
+  <div id="splash-screen" class="screen screen--visible">
+    <div class="splash-screen">
+      <div class="splash-content">
+        <div class="splash-logo"><span>VE</span>ILCODE</div>
+        <div class="splash-tagline">Decipher the path, one word at a time.</div>
+        <div class="splash-actions">
+          <button id="beginBtn" class="primary">Begin</button>
+          <button id="continueBtn" class="secondary" style="display: none;">Continue</button>
+          <button id="tutorialBtn" class="secondary">Tutorial</button>
+          <button id="splashCodexBtn" class="secondary">Codex</button>
+        </div>
+        <div class="splash-hint">Best played in portrait mode</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUTORIAL SCREEN -->
+  <div id="tutorial-screen" class="screen">
+    <div class="tutorial-screen">
+      <div class="tutorial-header">
+        <div class="tutorial-title">Tutorial</div>
+        <button id="tutorialCloseBtn" class="tutorial-close">×</button>
+      </div>
+      <div class="tutorial-content">
+        <div class="tutorial-panel">
+          <div class="puzzle-header">
+            <div class="puzzle-title">Tutorial Level</div>
+            <div class="puzzle-meta">4 letters · Monolith</div>
+          </div>
+          <div class="puzzle-card">
+            <div class="clue">A barrier you can open</div>
+            <div class="rune-puzzle">
+              <div class="rune-slots" id="tutorialRuneSlots"></div>
+              <div class="rune-actions">
+                <button id="tutorialRevealBtn" class="btn-commit" disabled>Reveal</button>
+                <button id="tutorialClearBtn" class="btn-clear">Clear</button>
+              </div>
+              <div class="rune-keyboard-wrapper">
+                <div class="rune-family-tabs" id="tutorialFamilyTabs"></div>
+                <div class="rune-keyboard" id="tutorialKeyboard"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Tutorial Tooltip Dialog -->
+        <div id="tutorialTooltipDialog" class="tutorial-tooltip-dialog">
+          <div class="tutorial-tooltip-content">
+            <div class="tutorial-tooltip-header">
+              <h3 id="tutorialTooltipTitle">Tutorial Tip</h3>
+              <button id="tutorialTooltipClose" class="tutorial-tooltip-close">×</button>
+            </div>
+            <div class="tutorial-tooltip-body">
+              <p id="tutorialTooltipText"></p>
+            </div>
+            <div class="tutorial-tooltip-footer">
+              <button id="tutorialTooltipOk" class="tutorial-tooltip-btn">Got it!</button>
+            </div>
+          </div>
+        </div>
+        <div class="tutorial-steps">
+          <div class="tutorial-step active" data-step="1">
+            <h3>Step 1: Read the Clue</h3>
+            <p>Each level gives you a clue. Here it says "A barrier you can open" - think about what word that might be!</p>
+          </div>
+          <div class="tutorial-step" data-step="2">
+            <h3>Step 2: Select Runes</h3>
+            <p>Tap runes from the keyboard below to fill the slots. The letter will appear above each slot as you select it.</p>
+          </div>
+          <div class="tutorial-step" data-step="3">
+            <h3>Step 3: Fill All Slots</h3>
+            <p>Once all slots are filled, the "Reveal" button will be enabled. Tap it to check your answer!</p>
+          </div>
+          <div class="tutorial-step" data-step="4">
+            <h3>Step 4: Use the Codex</h3>
+            <p>The Codex shows all rune families. Use it as a reference, but remember - it doesn't show which letter each rune represents!</p>
+          </div>
+        </div>
+        <div class="tutorial-navigation">
+          <button id="tutorialPrevBtn" class="tutorial-nav-btn" disabled>Previous</button>
+          <button id="tutorialNextBtn" class="tutorial-nav-btn">Next</button>
+          <button id="tutorialSkipBtn" class="tutorial-nav-btn secondary">Skip Tutorial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVEL SELECT SCREEN -->
+  <div id="level-select-screen" class="screen">
+    <div class="level-select-screen">
+      <div class="level-select-header">
+        <div class="level-select-title"><span>VE</span>ILCODE</div>
+        <div class="level-select-actions">
+          <button id="levelSelectBackBtn">← Title</button>
+          <button id="levelSelectCodexBtn">Codex</button>
+        </div>
+      </div>
+      <div class="level-select-content">
+        <div class="map-panel">
+      <div class="map-title">Path of Words</div>
+      <div id="levelList" class="level-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVEL INTRO SCREEN -->
+  <div id="level-intro-screen" class="screen">
+    <div class="level-intro-screen">
+      <div class="level-intro-content">
+        <div class="level-intro-label">LEVEL</div>
+        <div class="level-intro-badge">
+          <div class="level-circle">
+            <div id="levelNumber" class="level-number">1</div>
+          </div>
+        </div>
+        <div class="level-stars" aria-label="Level rating">
+          <span class="star" data-star="1">★</span>
+          <span class="star" data-star="2">★</span>
+          <span class="star" data-star="3">★</span>
+        </div>
+        <button id="levelIntroPlayBtn" class="level-intro-play">PLAY</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen" class="screen">
+    <div class="game-screen">
+      <div class="game-header">
+        <div class="game-header-title"><span>VE</span>ILCODE</div>
+        <div class="game-header-actions">
+          <button id="gameBackBtn">← Map</button>
+          <button id="gameCodexBtn">Codex</button>
+        </div>
+      </div>
+      <div class="game-content">
+        <div class="puzzle-panel">
+      <div class="puzzle-header">
+        <div class="puzzle-title" id="levelTitle">Level 1</div>
+        <div class="puzzle-meta" id="levelMeta">4 letters · Monolith</div>
+      </div>
+      <div class="puzzle-card">
+        <div id="clueText" class="clue"></div>
+        <div id="revealedWord" class="revealed-word" aria-hidden="true"></div>
+        
+        <!-- Rune-based puzzle interface -->
+        <div class="rune-puzzle">
+          <div class="rune-slots" id="runeSlots">
+            <!-- Dynamically filled: one .rune-slot per letter -->
+          </div>
+          
+          <div class="rune-actions">
+            <button id="commitRunesBtn" class="btn-commit" disabled>Reveal</button>
+            <button id="clearRunesBtn" class="btn-clear">Clear</button>
+          </div>
+          
+          <div class="rune-keyboard-wrapper">
+            <div class="rune-family-tabs" id="runeFamilyTabs">
+              <!-- Dynamically filled: one button per family -->
+            </div>
+            <div class="rune-keyboard" id="runeKeyboard">
+              <!-- Dynamically filled: full alphabet of the active family -->
+            </div>
+          </div>
+        </div>
+        
+        <div id="runeFeedback" class="rune-feedback"></div>
+        <div class="hint-note">
+          Need help? The Codex only shows symbols – no letters.
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS POPUP -->
+  <div id="successPopup" class="success-popup">
+    <div class="success-popup-content">
+      <div class="success-title">Level Complete!</div>
+      <div class="success-time" id="successTime">0:00</div>
+      <div class="success-stars" id="successStars" aria-label="Stars earned">
+        <span class="success-star" data-star="1">★</span>
+        <span class="success-star" data-star="2">★</span>
+        <span class="success-star" data-star="3">★</span>
+      </div>
+      <div class="success-actions-popup">
+        <button id="successNextBtn" class="primary" style="display: none;">Next Level</button>
+        <button id="successMapBtn" class="secondary">Back to Map</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CODEX OVERLAY -->
+  <div id="codexOverlay" class="codex-overlay">
+    <div class="codex-panel">
+      <div class="codex-header">
+        <div class="codex-title">Codex · Symbol Reference (No Legend)</div>
+        <button id="closeCodexBtn">Close</button>
+      </div>
+      <div class="codex-body">
+        <div>
+          <div class="codex-section-title">F1 – Monolith</div>
+          <div id="codexF1" class="codex-grid"></div>
+        </div>
+        <div>
+          <div class="codex-section-title">F2 – Veil Glyphs</div>
+          <div id="codexF2" class="codex-grid"></div>
+        </div>
+        <div>
+          <div class="codex-section-title">F3 – Orbit</div>
+          <div id="codexF3" class="codex-grid"></div>
+        </div>
+        <div>
+          <div class="codex-section-title">F4 – Labyrinth</div>
+          <div id="codexF4" class="codex-grid"></div>
+        </div>
+        <div>
+          <div class="codex-section-title">F5 – Starburst</div>
+          <div id="codexF5" class="codex-grid"></div>
+        </div>
+        <div>
+          <div class="codex-section-title">F6 – Constellation</div>
+          <div id="codexF6" class="codex-grid"></div>
+        </div>
+      </div>
+      <div class="codex-footer">
+        You see the script everywhere. It never came with instructions.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="runes.js"></script>
+  <script src="puzzles.js"></script>
+  <script src="codex.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

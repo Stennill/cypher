@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VEILCODE - Decipher the Path</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0c12;
+      --bg-darker: #050608;
+      --accent: #ffb347;
+      --accent-strong: #f6c76a;
+      --text: #e0e4eb;
+      --text-muted: #707694;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
+    header {
+      background: var(--bg-darker);
+      border-bottom: 1px solid rgba(255, 179, 71, 0.2);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-strong);
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .cta-button {
+      background: var(--accent);
+      color: var(--bg-darker);
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 179, 71, 0.4);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 4rem 0 6rem;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--accent-strong) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero .cta-button {
+      font-size: 1.25rem;
+      padding: 1rem 2rem;
+    }
+
+    /* Game Examples */
+    .examples {
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--accent-strong);
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .example-card {
+      background: var(--bg-darker);
+      border: 1px solid rgba(255, 179, 71, 0.2);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .example-card img {
+      width: 100%;
+      max-width: 250px;
+      height: auto;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      border: 2px solid rgba(255, 179, 71, 0.3);
+    }
+
+    .example-card h3 {
+      color: var(--accent-strong);
+      margin-bottom: 0.5rem;
+    }
+
+    .example-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* How to Play */
+    .how-to-play {
+      padding: 4rem 0;
+      background: var(--bg-darker);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .step {
+      background: var(--bg-dark);
+      padding: 2rem;
+      border-radius: 1rem;
+      border-left: 4px solid var(--accent);
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--accent);
+      color: var(--bg-darker);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      color: var(--accent-strong);
+      margin-bottom: 0.5rem;
+    }
+
+    .step p {
+      color: var(--text-muted);
+    }
+
+    /* Bottom CTA */
+    .bottom-cta {
+      padding: 4rem 0;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+    }
+
+    .bottom-cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--accent-strong);
+    }
+
+    .bottom-cta p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-darker);
+      padding: 2rem 0;
+      text-align: center;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 179, 71, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .examples-grid,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <div class="logo"><span>VE</span>ILCODE</div>
+      <a href="/app/" class="cta-button">Play Now</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1><span>VE</span>ILCODE</h1>
+      <p>Decipher the path, one word at a time. A mobile puzzle game where ancient runes hold the key to unlocking hidden words.</p>
+      <a href="/app/" class="cta-button">Download & Play</a>
+    </div>
+  </section>
+
+  <section class="examples">
+    <div class="container">
+      <h2 class="section-title">Game Screenshots</h2>
+      <div class="examples-grid">
+        <div class="example-card">
+          <div style="background: #0a0c12; padding: 2rem; border-radius: 0.5rem; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffb347;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">🎮</div>
+            <h3 style="margin-bottom: 0.5rem;">Level Selection</h3>
+            <p style="color: #707694;">Navigate through levels and track your progress</p>
+          </div>
+          <h3>Level Map</h3>
+          <p>Choose your challenge and see your progress</p>
+        </div>
+        <div class="example-card">
+          <div style="background: #0a0c12; padding: 2rem; border-radius: 0.5rem; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffb347;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">🔤</div>
+            <h3 style="margin-bottom: 0.5rem;">Rune Puzzle</h3>
+            <p style="color: #707694;">Match runes to solve word puzzles</p>
+          </div>
+          <h3>Rune Solving</h3>
+          <p>Select runes to build the hidden word</p>
+        </div>
+        <div class="example-card">
+          <div style="background: #0a0c12; padding: 2rem; border-radius: 0.5rem; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffb347;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">⭐</div>
+            <h3 style="margin-bottom: 0.5rem;">Star Ratings</h3>
+            <p style="color: #707694;">Earn stars based on completion time</p>
+          </div>
+          <h3>Star System</h3>
+          <p>Complete levels quickly to earn more stars</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-to-play">
+    <div class="container">
+      <h2 class="section-title">How to Play</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Read the Clue</h3>
+          <p>Each level provides a clue to help you discover the hidden word.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Select Runes</h3>
+          <p>Choose runes from the keyboard to fill the slots and build your answer.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Reveal & Solve</h3>
+          <p>When all slots are filled, reveal your answer and see if you're correct!</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Earn Stars</h3>
+          <p>Complete levels quickly to earn more stars and unlock new challenges.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bottom-cta">
+    <div class="container">
+      <h2>Ready to Begin?</h2>
+      <p>Download VEILCODE and start deciphering the path today.</p>
+      <a href="/app/" class="cta-button">Get Started</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 VEILCODE. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
+

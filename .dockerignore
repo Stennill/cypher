@@ -1,0 +1,8 @@
+.git
+.gitignore
+fly.toml
+.dockerignore
+*.md
+cipher-alphabet.html
+runes/Build-RuneFont.ps1
+

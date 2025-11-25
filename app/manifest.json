@@ -1,0 +1,23 @@
+{
+  "name": "VEILCODE",
+  "short_name": "VEILCODE",
+  "description": "Decipher the path, one word at a time",
+  "start_url": "/app/",
+  "display": "standalone",
+  "background_color": "#0a0c12",
+  "theme_color": "#ffb347",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/app/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/app/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+
